@@ -8,5 +8,6 @@ namespace Biblioteca.Data
         {
         }
         public DbSet<Estudiante> Estudiantes { get; set; }
+        public DbSet<Libro> Libros { get; set; }
     }
 }

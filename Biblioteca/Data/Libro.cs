@@ -15,7 +15,7 @@ namespace Biblioteca.Data
         public string? Autor { get; set; }
 
         [Required(ErrorMessage = "La Categoría es obligatoria.")]
-        [StringLength(100, ErrorMessage = "Máximo 1000 caracteres.")]
+        [StringLength(1000, ErrorMessage = "Máximo 1000 caracteres.")]
         public string? Categoria { get; set; }
 
         [Required(ErrorMessage = "La cantidad de disponibilidad es obligatoria.")]

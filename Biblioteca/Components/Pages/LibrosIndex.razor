@@ -1,0 +1,67 @@
+﻿@page "/libros"
+@rendermode InteractiveServer
+@inject NavigationManager _navigator;
+@inject IRepositorioLibros _repositorio;
+<h3>Libros</h3>
+<a class="btn btn-success" href="libros/nuevo">Agregar libro</a>
+@if (_libros == null)
+{
+    <div class="spinner-border" role="status">
+        <span class="visually-hidden">Cargando...</span>
+    </div>
+}
+else if (_libros.Count == 0)
+{
+    <h3>No existen libros registrados</h3>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Título</th>
+                <th>Autor</th>
+                <th>Categoría</th>
+                <th>Disponibles</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Libro libro in _libros)
+            {
+                <tr>
+                    <td>@libro.Titulo</td>
+                    <td>@libro.Autor</td>
+                    <td>@libro.Categoria</td>
+                    <td>@libro.Disponibles</td>
+                    <td>
+                        <button class="btn btn-sm" title="Modificar" @onclick="()=>Modificar(libro.Id)">
+                        </button>
+                        <button class="btn btn-sm" title="Eliminar" @onclick="()=>Eliminar(libro)">
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+@code {
+    private List<Libro>? _libros;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _libros = await _repositorio.GetAll();
+    }
+
+    private async void Eliminar(Libro libro)
+    {
+        await _repositorio.Delete(libro.Id);
+        _libros!.Remove(libro);
+        StateHasChanged();
+    }
+
+    private void Modificar(int id)
+    {
+        _navigator.NavigateTo($"/libros/editar/{id}");
+    }
+}

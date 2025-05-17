@@ -1,0 +1,76 @@
+﻿@page "/libros/nuevo"
+@page "/libros/editar/{Id:int}"
+@rendermode InteractiveServer
+@inject NavigationManager _navigator;
+@inject IRepositorioLibros _respositorio;
+<h2>@_mensaje Libro</h2>
+<EditForm Model="_libro" FormName="frmLibro" OnValidSubmit="Guardar">
+    <DataAnnotationsValidator />
+    <div class="row mb-3">
+        <label for="txtTitulo" class="col-2 col-form-label">Título</label>
+        <div class="col-10">
+            <InputText id="txtTitulo" class="form-control" @bind-Value="_libro.Titulo" />
+            <ValidationMessage For="()=>_libro.Titulo" />
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label for="txtAutor" class="col-2 col-form-label">Autor</label>
+        <div class="col-10">
+            <InputText id="txtAutor" class="form-control" @bind-Value="_libro.Autor" />
+            <ValidationMessage For="()=>_libro.Autor" />
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label for="txtCategoria" class="col-2 col-form-label">Categoria</label>
+        <div class="col-10">
+            <InputText id="txtCategoria" class="form-control" @bind-Value="_libro.Categoria" />
+            <ValidationMessage For="()=>_libro.Categoria" />
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label for="txtDisponibles" class="col-2 col-form-label">Disponibles</label>
+        <div class="col-10">
+            <InputNumber id="txtCategoria" class="form-control" @bind-Value="_libro.Disponibles" />
+            <ValidationMessage For="()=>_libro.Disponibles" />
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Guardar</button>
+    <button class="btn btn-danger ms-3" @onclick="Cancelar" @onclick:preventDefault>Cancelar</button>
+</EditForm>
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+    private string _mensaje = "";
+    private Libro? _libro = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Id > 0)
+        {
+            _libro = await _respositorio.Get(Id);
+            _mensaje = "Modificar";
+        }
+        else
+        {
+            _mensaje = "Nuevo";
+        }
+    }
+
+    private async void Guardar()
+    {
+        if (Id > 0)
+        {
+            await _respositorio.Update(Id, _libro!);
+        }
+        else
+        {
+            await _respositorio.Add(_libro!);
+        }
+    }
+
+    private void Cancelar()
+    {
+        _navigator.NavigateTo("/libros");
+    }
+}
