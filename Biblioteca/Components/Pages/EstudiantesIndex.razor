@@ -1,0 +1,60 @@
+﻿@page "/estudiantes"
+@rendermode InteractiveServer
+@inject NavigationManager _navigator;
+@inject IRepositorioEstudiantes _repositorio;
+<h3>Estudiantes</h3>
+<a class="btn btn-success" href="estudiantes/nuevo">Agregar estudiante</a>
+@if(_estudiantes == null)
+{
+    <div class="spinner-border" role="status">
+        <span class="visually-hidden">Cargando...</span>
+    </div>
+}else if(_estudiantes.Count == 0)
+{
+    <h3>No existen estudiantes registrados</h3>
+}else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Grupo</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Estudiante estudiante in _estudiantes)
+            {
+                <tr>
+                    <td>@estudiante.Nombre</td>
+                    <td>@estudiante.Grupo</td>
+                    <td>
+                        <button class="btn btn-sm" title="Modificar" @onclick="()=>Modificar(estudiante.Id)">
+
+                        </button>
+                        <button class="btn btn-sm" title="Eliminar" @onclick="()=>Eliminar(estudiante)">
+
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+@code {
+    private List<Estudiante>? _estudiantes;
+
+    protected override async Task OnInitializedAsync(){
+        _estudiantes = await _repositorio.GetAll();
+    }
+
+    private async void Eliminar(Estudiante estudiante){
+        await _repositorio.Delete(estudiante.Id);
+        _estudiantes!.Remove(estudiante);
+        StateHasChanged();
+    }
+
+    private void Modificar(int id){
+        _navigator.NavigateTo($"/estudiantes/editar/{id}");
+    }
+}

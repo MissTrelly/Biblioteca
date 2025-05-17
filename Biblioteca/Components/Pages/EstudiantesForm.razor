@@ -1,0 +1,62 @@
+﻿@page "/estudiantes/nuevo"
+@page "/estudiantes/editar/{Id:int}"
+@rendermode InteractiveServer
+@inject NavigationManager _navigator;
+@inject IRepositorioEstudiantes _respositorio;
+<h2>@_mensaje Estudiante</h2>
+<EditForm Model="_estudiante" FormName="frmEstudiante" OnValidSubmit="Guardar">
+    <DataAnnotationsValidator />
+    <div class="row mb-3">
+        <label for="txtNombre" class="col-2 col-form-label">Nombre</label>
+        <div class="col-10">
+            <InputText id="txtNombre" class="form-control" @bind-Value="_estudiante.Nombre" />
+            <ValidationMessage For="()=>_estudiante.Nombre" />
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label for="txtGrupo" class="col-2 col-form-label">Grupo</label>
+        <div class="col-10">
+            <InputText id="txtGrupo" class="form-control" @bind-Value="_estudiante.Grupo" />
+            <ValidationMessage For="()=>_estudiante.Grupo" />
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Guardar</button>
+    <button class="btn btn-danger ms-3" @onclick="Cancelar" @onclick:preventDefault>Cancelar</button>
+</EditForm>
+
+@code{
+    [Parameter]
+    public int Id { get; set; }
+    private string _mensaje = "";
+    private Estudiante? _estudiante = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Id > 0)
+        {
+            _estudiante = await _respositorio.Get(Id);
+            _mensaje = "Modificar";
+        }
+        else
+        {
+            _mensaje = "Nuevo";
+        }
+    }
+
+    private async void Guardar()
+    {
+        if(Id > 0)
+        {
+            await _respositorio.Update(Id, _estudiante!);
+        }
+        else
+        {
+            await _respositorio.Add(_estudiante!);
+        }
+    }
+
+    private void Cancelar()
+    {
+        _navigator.NavigateTo("/estudiantes");
+    }
+}
