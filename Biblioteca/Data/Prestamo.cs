@@ -6,9 +6,11 @@ namespace Biblioteca.Data
     {
         public int Id { get; set; }
         [Required(ErrorMessage = "Debe seleccionar un estudiante.")]
-        public int Id_estudiante { get; set; }
+        public int EstudianteId { get; set; }
+        virtual public ICollection<Estudiante>? Estudiante { get; set; }
         [Required(ErrorMessage = "Debe seleccionar un libro.")]
-        public int Id_libro { get; set; }
+        public int LibroId { get; set; }
+        virtual public ICollection<Libro>? Libro { get; set; }
         [Required(ErrorMessage = "La fecha de préstamo es obligatoria.")]
         public DateOnly Fecha_prestamo { get; set; }
         [Required(ErrorMessage = "La fecha de devolución es obligatoria.")]

@@ -1,0 +1,69 @@
+﻿@page "/prestamos"
+@rendermode InteractiveServer
+@inject NavigationManager _navigator;
+@inject IRepositorioPrestamos _repositorio;
+<h3>Prestamos</h3>
+<a class="btn btn-success" href="prestamos/nuevo">Agregar préstamo</a>
+@if (_prestamos == null)
+{
+    <div class="spinner-border" role="status">
+        <span class="visually-hidden">Cargando...</span>
+    </div>
+}
+else if (_prestamos.Count == 0)
+{
+    <h3>No existen préstamos registrados</h3>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Estudiante</th>
+                <th>Libro</th>
+                <th>Fecha del Préstamo</th>
+                <th>Fecha de Devolución</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Prestamo prestamo in _prestamos)
+            {
+                <tr>
+                    <td>@prestamo.EstudianteId</td>
+                    <td>@prestamo.LibroId</td>
+                    <td>@prestamo.Fecha_prestamo</td>
+                    <td>@prestamo.Fecha_devolucion</td>
+                    <td>@prestamo.Estado</td>
+                    <td>
+                        <button class="btn btn-sm" title="Modificar" @onclick="()=>Modificar(prestamo.Id)">
+                        </button>
+                        <button class="btn btn-sm" title="Eliminar" @onclick="()=>Eliminar(prestamo)">
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+@code {
+    private List<Prestamo>? _prestamos;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _prestamos = await _repositorio.GetAll();
+    }
+
+    private async void Eliminar(Prestamo prestamo)
+    {
+        await _repositorio.Delete(prestamo.Id);
+        _prestamos!.Remove(prestamo);
+        StateHasChanged();
+    }
+
+    private void Modificar(int id)
+    {
+        _navigator.NavigateTo($"/prestamos/editar/{id}");
+    }
+}
