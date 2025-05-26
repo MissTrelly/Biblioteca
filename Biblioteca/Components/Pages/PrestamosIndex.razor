@@ -59,6 +59,18 @@ else
     protected override async Task OnInitializedAsync()
     {
         _prestamos = await _repositorio.GetAll();
+
+        var hoy = DateOnly.FromDateTime(DateTime.Today);
+        // aqui
+        foreach (var prestamo in _prestamos)
+        {
+            if (prestamo.Estado == "Pendiente" && hoy > prestamo.Fecha_devolucion)
+            {
+                prestamo.Estado = "Atrasado";
+                await _repositorio.Update(prestamo.Id, prestamo);
+            }
+        }
+        //aqui
     }
 
     private async void Eliminar(Prestamo prestamo)

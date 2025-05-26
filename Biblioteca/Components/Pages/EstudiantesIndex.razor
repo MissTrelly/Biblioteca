@@ -17,6 +17,7 @@
     <table class="table table-striped">
         <thead>
             <tr>
+                <th>ID</th>
                 <th>Nombre</th>
                 <th>Grupo</th>
                 <th>Acciones</th>
@@ -26,6 +27,7 @@
             @foreach (Estudiante estudiante in _estudiantes)
             {
                 <tr>
+                    <td>@estudiante.Id</td>
                     <td>@estudiante.Nombre</td>
                     <td>@estudiante.Grupo</td>
                     <td>

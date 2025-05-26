@@ -110,7 +110,7 @@
         }
 
         // Validar disponibilidad del libro
-        if (!libro.Disponible)
+        if (!libro.Disponible && Id <= 0)
         {
             _error = "El libro no está disponible para préstamo.";
             StateHasChanged();
@@ -120,12 +120,13 @@
         // Guardar o actualizar
         if (Id > 0)
         {
+            if (_prestamo.Estado == "Devuelto") libro.Disponible = true;
             await _respositorio.Update(Id, _prestamo);
         }
         else
         {
             await _respositorio.Add(_prestamo);
-            if (libro != null)
+            if (libro != null && _prestamo.Estado != "Devuelto")
             {
                 libro.Disponible = false;
                 await _repositorioLibros.Update(libro.Id, libro);

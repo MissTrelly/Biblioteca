@@ -19,6 +19,7 @@ else
     <table class="table table-striped">
         <thead>
             <tr>
+                <th>ID</th>
                 <th>Título</th>
                 <th>Autor</th>
                 <th>Categoría</th>
@@ -30,6 +31,7 @@ else
             @foreach (Libro libro in _libros)
             {
                 <tr>
+                    <td>@libro.Id</td>
                     <td>@libro.Titulo</td>
                     <td>@libro.Autor</td>
                     <td>@libro.Categoria</td>
