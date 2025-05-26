@@ -18,8 +18,7 @@ namespace Biblioteca.Data
         [StringLength(1000, ErrorMessage = "Máximo 1000 caracteres.")]
         public string? Categoria { get; set; }
 
-        [Required(ErrorMessage = "La cantidad de disponibilidad es obligatoria.")]
-        [Range(0, 999999999999999999, ErrorMessage = "No puede ser menor a 0")]
-        public int Disponibles { get; set; }
+        [Required(ErrorMessage = "Debes indicar si está disponible.")]
+        public bool Disponible { get; set; }
     }
 }

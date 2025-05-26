@@ -41,7 +41,7 @@ namespace Biblioteca.Repositorio
                 libroactual.Titulo = libro.Titulo;
                 libroactual.Autor = libro.Autor;
                 libroactual.Categoria = libro.Categoria;
-                libroactual.Disponibles = libro.Disponibles;
+                libroactual.Disponible = libro.Disponible;
                 await _context.SaveChangesAsync();
             }
         }

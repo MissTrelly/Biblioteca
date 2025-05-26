@@ -28,10 +28,11 @@
         </div>
     </div>
     <div class="row mb-3">
-        <label for="txtDisponibles" class="col-2 col-form-label">Disponibles</label>
+        <label for="chkDisponible" class="col-2 col-form-label">Disponible</label>
         <div class="col-10">
-            <InputNumber id="txtCategoria" class="form-control" @bind-Value="_libro.Disponibles" />
-            <ValidationMessage For="()=>_libro.Disponibles" />
+            <InputCheckbox id="chkDisponible" class="form-check-input me-2" @bind-Value="_libro.Disponible" />
+            <label class="form-check-label" for="chkDisponible">Sí</label>
+            <ValidationMessage For="()=>_libro.Disponible" />
         </div>
     </div>
     <button type="submit" class="btn btn-primary">Guardar</button>
@@ -67,6 +68,7 @@
         {
             await _respositorio.Add(_libro!);
         }
+        _navigator.NavigateTo("/libros");
     }
 
     private void Cancelar()
